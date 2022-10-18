@@ -1,0 +1,1385 @@
+{
+	"info": {
+		"_postman_id": "569aa9cc-067c-4298-8b6f-8e4ad972bf3e",
+		"name": "Notes Live",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16548351"
+	},
+	"item": [
+		{
+			"name": "User can't Get Auth with invalid mail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var JsonData = pm.response.json()\r",
+							"var jwttoken = JsonData.jwt\r",
+							"pm.collectionVariables.set(\"token\",jwttoken)\r",
+							"pm.environment.set(\"token\",jwttoken)\r",
+							"\r",
+							"pm.test(\"Status code is 422\", function () {\r",
+							"    pm.response.to.have.status(422);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string from response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Not a valid email address.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Json value check\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error.mail[0]).to.eql(\"Not a valid email address.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([422, 499]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is UNPROCESSABLE ENTITY\", function () {\r",
+							"    pm.response.to.have.status(\"UNPROCESSABLE ENTITY\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \r",
+							"    \"error\": {\r",
+							"        \"mail\": [\r",
+							"            \"Not a valid email address.\"\r",
+							"        ]\r",
+							"    }\r",
+							"\r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"//var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    //pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"mail\":\"john@doe\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var JsonData = pm.response.json()\r",
+							"var jwttoken = JsonData.jwt\r",
+							"pm.collectionVariables.set(\"token\",jwttoken)\r",
+							"pm.environment.set(\"token\",jwttoken)\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string from response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"old\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Json value check\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.creation).to.eql(\"old\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(50000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 205]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is ok\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \r",
+							"    \"creation\": \"old\",\r",
+							"    \"jwt\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjIiLCJyb2xlcyI6ZmFsc2UsInRpbWV6b25lIjoiQW1lcmljYS9Nb250cmVhbCIsImV4cCI6MTY2NjAwMDc3MH0.f56ogs2Zywa33hd9gnsncsoxyQM-nASlZ_70ehubu9A\"\r",
+							"\r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"//var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    //pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"mail\":\"john@doe.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string from response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"john@doe.com\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User can add note with valid data\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.title).to.eql(\"New Jungle Book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is ok\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"    \"created\": \"Mon, 17 Oct 2022 08:44:01 GMT\",\r",
+							"    \"details\": \"We are here to celebrate, our hearts are full of pleasure. \",\r",
+							"    \"id\": 24,\r",
+							"    \"last_edit\": null,\r",
+							"    \"title\": \"New Jungle Book\",\r",
+							"    \"user\": {\r",
+							"        \"first_name\": \"\",\r",
+							"        \"id\": 2,\r",
+							"        \"last_login\": \"2022-10-09 09:32:24.870127+00:00\",\r",
+							"        \"last_name\": \"\",\r",
+							"        \"mail\": \"john@doe.com\",\r",
+							"        \"timezone\": \"America/Montreal\"\r",
+							"    }\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"title\":\"New Jungle Book\",\r\n\t\"details\":\"We are here to celebrate, our hearts are full of pleasure.\"\r\n    \r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User can't add note with invalid data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 422\", function () {\r",
+							"    pm.response.to.have.status(422);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string from response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Unknown field.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Json value check\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error.last_edit[0]).to.eql(\"Unknown field.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([422, 499]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is UNPROCESSABLE ENTITY\", function () {\r",
+							"    pm.response.to.have.status(\"UNPROCESSABLE ENTITY\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \r",
+							"    \"error\": {\r",
+							"        \"mail\": [\r",
+							"            \"Not a valid email address.\"\r",
+							"        ]\r",
+							"    }\r",
+							"\r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"//var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Schema is valid', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    //pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"title\":\"New Jungle Book\",\r\n\t\"details\":\"We are here to celebrate, our hearts are full of pleasure.\",\r\n    \"last_edit\": null\r\n    \r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Details of Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400, 480]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is BAD REQUEST\", function () {\r",
+							"    pm.response.to.have.status(\"BAD REQUEST\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"    \"created\": \"Mon, 17 Oct 2022 08:44:01 GMT\",\r",
+							"    \"details\": \"We are here to celebrate, our hearts are full of pleasure. \",\r",
+							"    \"id\": 24,\r",
+							"    \"last_edit\": null,\r",
+							"    \"title\": \"New Jungle Book\",\r",
+							"    \"user\": {\r",
+							"        \"first_name\": \"\",\r",
+							"        \"id\": 2,\r",
+							"        \"last_login\": \"2022-10-09 09:32:24.870127+00:00\",\r",
+							"        \"last_name\": \"\",\r",
+							"        \"mail\": \"john@doe.com\",\r",
+							"        \"timezone\": \"America/Montreal\"\r",
+							"    }\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Can't Get Details of Note with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400, 480]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is BAD REQUEST \", function () {\r",
+							"    pm.response.to.have.status(\"BAD REQUEST\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"    \"created\": \"Mon, 17 Oct 2022 08:44:01 GMT\",\r",
+							"    \"details\": \"We are here to celebrate, our hearts are full of pleasure. \",\r",
+							"    \"id\": 24,\r",
+							"    \"last_edit\": null,\r",
+							"    \"title\": \"New Jungle Book\",\r",
+							"    \"user\": {\r",
+							"        \"first_name\": \"\",\r",
+							"        \"id\": 2,\r",
+							"        \"last_login\": \"2022-10-09 09:32:24.870127+00:00\",\r",
+							"        \"last_name\": \"\",\r",
+							"        \"mail\": \"john@doe.com\",\r",
+							"        \"timezone\": \"America/Montreal\"\r",
+							"    }\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get List of Notes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string from response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"New Jungle Book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User can get list of notes with valid data\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.notes[0].title).to.contains(\"New Jungle Book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is ok\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"     \"count\": 1,\r",
+							"    \"notes\": [\r",
+							"        {\r",
+							"            \"created\": \"2022-10-09 09:32:24.870127+00:00\",\r",
+							"            \"details\": \"We are here to celebrate, our hearts are full of pleasure. \",\r",
+							"            \"id\": 1,\r",
+							"            \"last_edit\": \"2022-10-09 09:32:24.870127+00:00\",\r",
+							"            \"title\": \"Edited Jungle Book\"\r",
+							"        }\r",
+							"    ]\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note?page=1&size=10",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Can't Get List of Notes with invalid token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string from response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Invalid or Expired JWT\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User can get details of note with valid data\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error).to.eql(\"Invalid or Expired JWT\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is ok\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"    \"error\": \"Invalid or Expired JWT\"\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{toke}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note?page=1&size=1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is ok\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"    \"created\": \"Mon, 17 Oct 2022 08:44:01 GMT\",\r",
+							"    \"details\": \"We are here to celebrate, our hearts are full of pleasure. \",\r",
+							"    \"id\": 24,\r",
+							"    \"last_edit\": null,\r",
+							"    \"title\": \"New Jungle Book\",\r",
+							"    \"user\": {\r",
+							"        \"first_name\": \"\",\r",
+							"        \"id\": 2,\r",
+							"        \"last_login\": \"2022-10-09 09:32:24.870127+00:00\",\r",
+							"        \"last_name\": \"\",\r",
+							"        \"mail\": \"john@doe.com\",\r",
+							"        \"timezone\": \"America/Montreal\"\r",
+							"    }\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"title\":\"Edited Jungle Book\",\r\n\t\"details\":\"We are here to celebrate, our hearts are full of pleasure. \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Can't Edit Note With Invalid Authorization",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string from response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Invalid or Expired JWT\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User can get details of note with valid data\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error).to.eql(\"Invalid or Expired JWT\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is ok\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"    \"error\": \"Invalid or Expired JWT\"\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{toke}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"title\":\"Edited Jungle Book\",\r\n\t\"details\":\"We are here to celebrate, our hearts are full of pleasure. \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"    \"created\": \"Mon, 17 Oct 2022 08:44:01 GMT\",\r",
+							"    \"details\": \"We are here to celebrate, our hearts are full of pleasure. \",\r",
+							"    \"id\": 24,\r",
+							"    \"last_edit\": null,\r",
+							"    \"title\": \"New Jungle Book\",\r",
+							"    \"user\": {\r",
+							"        \"first_name\": \"\",\r",
+							"        \"id\": 2,\r",
+							"        \"last_login\": \"2022-10-09 09:32:24.870127+00:00\",\r",
+							"        \"last_name\": \"\",\r",
+							"        \"mail\": \"john@doe.com\",\r",
+							"        \"timezone\": \"America/Montreal\"\r",
+							"    }\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List of users - I shared note With",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string from response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User can add note with valid data\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.count).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the Get method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is ok\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"    \"count\": 0,\r",
+							"    \"models\": []\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note/user/shared-by-me",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"user",
+						"shared-by-me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit a Shared Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is NOT FOUND\", function () {\r",
+							"    pm.response.to.have.status(\"NOT FOUND\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404, 499]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"shared_to\":\"amin@rokomari.com\",\r\n\t\"note_id\":3,\r\n\t\"allowed\":\"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note/share/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"share",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Share a Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User can not get with an invalid email\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error).to.contains(\"No User Found By This Mail\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"No User Found By This Mail\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header check\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is BAD REQUEST\", function () {\r",
+							"    pm.response.to.have.status(\"BAD REQUEST\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the POST method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([400, 499]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"shared_to\":\"amin@rokomari.com\",\r\n\t\"note_id\":3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note/share",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"share"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get List of Notes Shared",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string from response body\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User can add note with valid data\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.count).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time check\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the Get method request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is ok\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"\r",
+							"    \"count\": 0,\r",
+							"    \"models\": []\r",
+							"    \r",
+							"};\r",
+							"\r",
+							"var data1 = [true, false];\r",
+							"var data2 = [true, 123];\r",
+							"\r",
+							"pm.test('Check the Schema validation ', function () {\r",
+							"    pm.expect(tv4.validate(data1, schema)).to.be.true;\r",
+							"    pm.expect(tv4.validate(data2, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Jwt-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"title\":\"Edited Jungle Book\",\r\n\t\"details\":\"We are here to celebrate, our hearts are full of pleasure. \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/note/share",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"note",
+						"share"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjIiLCJyb2xlcyI6ZmFsc2UsInRpbWV6b25lIjoiQW1lcmljYS9Nb250cmVhbCIsImV4cCI6MTY2NjA3MjY1OH0.ATrW2qhBEJUVLggZ79ggNv8kng-68lx1dOErrh55Vbs"
+		}
+	]
+}
